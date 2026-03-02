@@ -1,4 +1,4 @@
-const BASE_DOMAIN = 'your-server-domain'
+const BASE_DOMAIN = '47.96.65.146'
 const CHAT_URL = `http://${BASE_DOMAIN}/chat`
 const API_URL = `http://${BASE_DOMAIN}/api`
 const WS_URL = `ws://${BASE_DOMAIN}/msg_gateway`

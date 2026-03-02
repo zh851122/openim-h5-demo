@@ -20,6 +20,12 @@
         <img :src="props.active ? contacts_active : contacts" />
       </template>
     </van-tabbar-item>
+    <van-tabbar-item to="/live">
+      <span>{{ $t('live') }}</span>
+      <template #icon="props">
+        <img :src="props.active ? live_active : live" />
+      </template>
+    </van-tabbar-item>
     <van-tabbar-item to="/workbench">
       <span>{{ $t('workbench') }}</span>
       <template #icon="props">
@@ -41,6 +47,9 @@ import conversation_active from '@assets/images/tabbar/conversation_active.png'
 
 import contacts from '@assets/images/tabbar/contacts.png'
 import contacts_active from '@assets/images/tabbar/contacts_active.png'
+
+import live from '@assets/images/tabbar/moments.png'
+import live_active from '@assets/images/tabbar/moments_active.png'
 
 import workbench from '@assets/images/tabbar/workbench.png'
 import workbench_active from '@assets/images/tabbar/workbench_active.png'

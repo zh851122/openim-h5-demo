@@ -3,7 +3,7 @@
     <div class="flex-1 overflow-hidden">
       <router-view v-slot="{ Component }">
         <transition>
-          <keep-alive include="profile,contact,conversation">
+          <keep-alive include="profile,contact,conversation,live">
             <component :is="Component" />
           </keep-alive>
         </transition>

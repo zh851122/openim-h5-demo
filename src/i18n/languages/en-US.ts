@@ -11,6 +11,7 @@ export const lang = {
   loading: 'Loading',
   chats: 'Messages',
   contact: 'Contacts',
+  live: 'Live',
   workbench: 'Workbench',
   profile: 'Mine',
   welcome: 'Welcome to OpenCorp',

@@ -16,14 +16,12 @@ declare module '@vue/runtime-core' {
     DetailInfoItem: typeof import('./src/components/DetailInfoItem/index.vue')['default']
     GenericListItem: typeof import('./src/components/GenericListItem/index.vue')['default']
     NavBar: typeof import('./src/components/NavBar/index.vue')['default']
-    QrScaner: typeof import('./src/components/QrScaner/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingRowItem: typeof import('./src/components/SettingRowItem/index.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanBadge: typeof import('vant/es')['Badge']
     VanButton: typeof import('vant/es')['Button']
-    VanCheckbox: typeof import('vant/es')['Checkbox']
     VanDatePicker: typeof import('vant/es')['DatePicker']
     VanEmpty: typeof import('vant/es')['Empty']
     VanField: typeof import('vant/es')['Field']
@@ -51,6 +49,5 @@ declare module '@vue/runtime-core' {
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTabs: typeof import('vant/es')['Tabs']
     VanUploader: typeof import('vant/es')['Uploader']
-    VideoPlayer: typeof import('./src/components/VideoPlayer/index.vue')['default']
   }
 }

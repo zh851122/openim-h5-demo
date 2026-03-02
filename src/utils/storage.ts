@@ -37,8 +37,26 @@ export const getAccessedGroupApplication = () =>
     ? JSON.parse(localStorage.getItem(`${getIMUserID()}_accessedGroupApplications`)!)
     : []
 
-export const getWsUrl = () => localStorage.getItem('wsUrl') || process.env.WS_URL!
-export const getApiUrl = () => localStorage.getItem('apiUrl') || process.env.API_URL!
-export const getChatUrl = () => localStorage.getItem('chatUrl') || process.env.CHAT_URL!
+const resolveHttpUrl = (value: string) => {
+  if (/^https?:\/\//i.test(value)) return value
+  if (value.startsWith('/')) return `${window.location.origin}${value}`
+  return value
+}
+
+const resolveWsUrl = (value: string) => {
+  if (/^wss?:\/\//i.test(value)) return value
+  if (value.startsWith('/')) {
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    return `${wsProtocol}//${window.location.host}${value}`
+  }
+  return value
+}
+
+export const getWsUrl = () =>
+  resolveWsUrl(localStorage.getItem('wsUrl') || process.env.WS_URL!)
+export const getApiUrl = () =>
+  resolveHttpUrl(localStorage.getItem('apiUrl') || process.env.API_URL!)
+export const getChatUrl = () =>
+  resolveHttpUrl(localStorage.getItem('chatUrl') || process.env.CHAT_URL!)
 export const getLogLevel = () =>
   localStorage.getItem('logLevel') || process.env.LOG_LEVEL!

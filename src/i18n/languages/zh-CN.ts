@@ -11,6 +11,7 @@ export const lang = {
   loading: '加载中',
   chats: '消息',
   contact: '通讯录',
+  live: '直播',
   workbench: '工作台',
   profile: '我的',
   welcome: '欢迎使用OpenCorp',

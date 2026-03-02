@@ -14,6 +14,24 @@ export default defineConfig({
     port: 3003,
     host: '0.0.0.0',
     hmr: true,
+    proxy: {
+      '/chat': {
+        target: 'http://127.0.0.1:10008',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/chat(?=\/|$)/, '') || '/',
+      },
+      '/api': {
+        target: 'http://127.0.0.1:10002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api(?=\/|$)/, '') || '/',
+      },
+      '/msg_gateway': {
+        target: 'ws://127.0.0.1:10001',
+        ws: true,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/msg_gateway(?=\/|$)/, '') || '/',
+      },
+    },
   },
   define: {
     'process.env':

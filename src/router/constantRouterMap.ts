@@ -54,6 +54,11 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import('@pages/conversation/index/index.vue'),
           },
           {
+            path: '/live',
+            name: 'Live',
+            component: () => import('@pages/live/index/index.vue'),
+          },
+          {
             path: '/contact',
             name: 'Contact',
             component: () => import('@pages/contact/index/index.vue'),

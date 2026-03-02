@@ -1,7 +1,8 @@
-const BASE_DOMAIN = 'your-server-domain'
-const CHAT_URL = `http://${BASE_DOMAIN}/chat`
-const API_URL = `http://${BASE_DOMAIN}/api`
-const WS_URL = `ws://${BASE_DOMAIN}/msg_gateway`
+// Dev uses Vite proxy to avoid CORS when accessing from LAN IP (e.g. http://192.168.x.x:3003).
+// See `openim-h5-demo/vite.config.ts` for proxy targets.
+const CHAT_URL = '/chat'
+const API_URL = '/api'
+const WS_URL = '/msg_gateway'
 
 export default {
   NODE_ENV: 'development',

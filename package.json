@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --force --host",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && node scripts/compress-wasm.mjs dist",
     "preview": "vite preview",
     "format": "prettier --write .",
     "postinstall": "patch-package"

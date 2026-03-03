@@ -50,8 +50,8 @@ dayjs.updateLocale('zh-cn', {
 })
 
 export const IMSDK = getSDK({
-  coreWasmPath: './openIM.wasm',
-  sqlWasmPath: '/sql-wasm.wasm',
+  coreWasmPath: process.env.WASM_URL || '/openIM.wasm',
+  sqlWasmPath: process.env.SQL_WASM_URL || '/sql-wasm.wasm',
 })
 
 export const tipMessaggeFormat = (msg: MessageItem) => {

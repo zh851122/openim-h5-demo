@@ -51,7 +51,7 @@
           <div class="metric_chip">{{ activeIndex + 1 }}/{{ rooms.length }}</div>
         </div>
 
-        <div class="chat_panel">
+        <div class="chat_panel" :style="chatPanelStyle">
           <div class="chat_list" ref="chatListRef">
             <div v-for="message in liveMessages" :key="message.id" class="chat_item">
               <span class="chat_name">{{ message.nickname }}:</span>
@@ -65,6 +65,8 @@
               :disabled="sendingMessage"
               placeholder="Say something..."
               @keydown.enter.prevent="sendPublicMessage"
+              @focus="handleChatInputFocus"
+              @blur="handleChatInputBlur"
             />
             <button
               class="chat_send"
@@ -191,6 +193,8 @@ const messageSeenMap = reactive<Record<string, boolean>>({})
 const chatInput = ref('')
 const sendingMessage = ref(false)
 const chatListRef = ref<HTMLDivElement>()
+const chatInputFocused = ref(false)
+const keyboardInset = ref(0)
 const onlineMembersVisible = ref(false)
 const onlineMembersLoading = ref(false)
 const roomChangeToken = ref(0)
@@ -226,6 +230,10 @@ const currentOnlineCount = computed(() => {
   if (state) return state.onlineCount
   return getBackendOnlineCount(room) ?? 0
 })
+
+const chatPanelStyle = computed(() => ({
+  marginBottom: `${keyboardInset.value}px`,
+}))
 
 const toNumber = (value: unknown) => {
   const result = Number(value)
@@ -590,6 +598,32 @@ const scrollChatBottom = (force = false) => {
   })
 }
 
+const getKeyboardInset = () => {
+  const viewport = window.visualViewport
+  if (!viewport) return 0
+  const inset = window.innerHeight - viewport.height - viewport.offsetTop
+  return inset > 0 ? Math.round(inset) : 0
+}
+
+const syncKeyboardInset = () => {
+  keyboardInset.value = chatInputFocused.value ? getKeyboardInset() : 0
+  scrollChatBottom(true)
+}
+
+const handleChatInputFocus = () => {
+  chatInputFocused.value = true
+  syncKeyboardInset()
+  setTimeout(() => {
+    syncKeyboardInset()
+    window.scrollTo(0, 0)
+  }, 80)
+}
+
+const handleChatInputBlur = () => {
+  chatInputFocused.value = false
+  keyboardInset.value = 0
+}
+
 const parsePublicMessage = (message: MessageItem): PublicMessage | undefined => {
   if (!message.clientMsgID) return undefined
   if (!currentRoomGroupID.value || message.groupID !== currentRoomGroupID.value) return undefined
@@ -855,6 +889,11 @@ onMounted(async () => {
   await loadRooms()
   await enterCurrentRoom()
 
+  window.visualViewport?.addEventListener('resize', syncKeyboardInset)
+  window.visualViewport?.addEventListener('scroll', syncKeyboardInset)
+  window.addEventListener('orientationchange', syncKeyboardInset)
+  window.addEventListener('resize', syncKeyboardInset)
+
   IMSDK.on(CbEvents.OnUserStatusChanged, onUserStatusChanged)
   IMSDK.on(CbEvents.OnGroupMemberAdded, onGroupMemberChanged)
   IMSDK.on(CbEvents.OnGroupMemberDeleted, onGroupMemberChanged)
@@ -870,6 +909,8 @@ onActivated(() => {
 
 onDeactivated(() => {
   roomChangeToken.value = Date.now()
+  chatInputFocused.value = false
+  keyboardInset.value = 0
   void (async () => {
     await leaveRoomPresence(currentRoom.value)
     await clearStatusSubscribe()
@@ -879,6 +920,10 @@ onDeactivated(() => {
 onUnmounted(() => {
   roomChangeToken.value = Date.now()
   onlineMembersVisible.value = false
+  window.visualViewport?.removeEventListener('resize', syncKeyboardInset)
+  window.visualViewport?.removeEventListener('scroll', syncKeyboardInset)
+  window.removeEventListener('orientationchange', syncKeyboardInset)
+  window.removeEventListener('resize', syncKeyboardInset)
   IMSDK.off(CbEvents.OnUserStatusChanged, onUserStatusChanged)
   IMSDK.off(CbEvents.OnGroupMemberAdded, onGroupMemberChanged)
   IMSDK.off(CbEvents.OnGroupMemberDeleted, onGroupMemberChanged)
@@ -1015,6 +1060,7 @@ onUnmounted(() => {
   background: rgb(7 15 26 / 62%);
   padding: 8px;
   backdrop-filter: blur(8px);
+  transition: margin-bottom 120ms ease-out;
 }
 
 .chat_list {

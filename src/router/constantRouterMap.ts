@@ -5,34 +5,26 @@ import {
 } from 'vue-router'
 import TabbarLayout from '@layout/index.vue'
 import GlobalWrap from '@layout/GlobalWrap.vue'
-import { IMSDK, initStore } from '@/utils/imCommon'
 import conversationRouters from './modules/conversation'
 import contactRouters from './modules/contact'
 import profileRouters from './modules/profile'
 import loginRouters from './modules/login'
 import { getIMToken, getIMUserID } from '@/utils/storage'
 
-const loginCheck = async (
+const loginCheck = (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) => {
-  try {
-    await IMSDK.getLoginStatus()
-    next()
-  } catch (error) {
-    const IMToken = getIMToken()
-    const IMUserID = getIMUserID()
-    if (!IMToken || !IMUserID) {
-      next('login')
-      return
-    }
-    if (to.path !== '/conversation') {
-      next('conversation')
-      return
-    }
-    next()
+  const IMToken = getIMToken()
+  const IMUserID = getIMUserID()
+
+  if (!IMToken || !IMUserID) {
+    next('login')
+    return
   }
+
+  next()
 }
 
 const routes: Array<RouteRecordRaw> = [
